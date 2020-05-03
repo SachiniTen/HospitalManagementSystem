@@ -54,7 +54,8 @@ public class Patient {
 				output += "<td>" + pPassword + "</td>";
 
 				// buttons
-				output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'></td>"
+				output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'"
+						+"data-pid='" + pID + "'>" + "</td>"
 						+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger'"
 						+ "data-pid='" + pID + "'>" + "</td></tr>";
 			}
@@ -78,24 +79,24 @@ public class Patient {
 				return "Error while connecting to the database for inserting.";
 			}
 			// create a prepared statement
-			String query = " insert into patient          "
-					+ " (`pFname`,`pLname`,`pAge`,`pGender`,`pAddress`,`pContactNo`,`pNIC`,`pEmail`,`pUsername`,`pPassword`)"
-					+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+			String query = " insert into patient"
+					+ " (`pID`,`pFname`,`pLname`,`pAge`,`pGender`,`pAddress`,`pContactNo`,`pNIC`,`pEmail`,`pUsername`,`pPassword`)"
+					+ " values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
 			// binding values
-			// preparedStmt.setInt(1, 0);
-			preparedStmt.setString(1, pFname);
-			preparedStmt.setString(2, pLname);
-			preparedStmt.setInt(3, Integer.parseInt(pAge));
-			preparedStmt.setString(4, pGender);
-			preparedStmt.setString(5, pAddress);
-			preparedStmt.setString(6, pContactNo);
-			preparedStmt.setString(7, pNIC);
-			preparedStmt.setString(8, pEmail);
-			preparedStmt.setString(9, pUsername);
-			preparedStmt.setString(10, pPassword);
+			preparedStmt.setInt(1, 0);
+			preparedStmt.setString(2, pFname);
+			preparedStmt.setString(3, pLname);
+			preparedStmt.setInt(4, Integer.parseInt(pAge));
+			preparedStmt.setString(5, pGender);
+			preparedStmt.setString(6, pAddress);
+			preparedStmt.setString(7, pContactNo);
+			preparedStmt.setString(8, pNIC);
+			preparedStmt.setString(9, pEmail);
+			preparedStmt.setString(10, pUsername);
+			preparedStmt.setString(11, pPassword);
 
 			// execute the statement
 			preparedStmt.execute();
@@ -119,7 +120,7 @@ public class Patient {
 				return "Error while connecting to the database for updating.";
 			}
 			// create a prepared statement
-			String query = "UPDATE patients SET pFname=?,pLname=?,pAge=?,pGender=?,pAddress=?,pContactNo=?,pNIC=?,pEmail=?,pUsername=?,pPassword=? WHERE pID=?";
+			String query = "UPDATE patient SET pFname=?,pLname=?,pAge=?,pGender=?,pAddress=?,pContactNo=?,pNIC=?,pEmail=?,pUsername=?,pPassword=? WHERE pID=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 			// binding values
 			preparedStmt.setString(1, pFname);

@@ -54,6 +54,8 @@ public class PatientsAPI extends HttpServlet {
 				   request.getParameter("pPassword")
 				 
 				   ); 
+		
+		response.getWriter().write(output);
 
 	}
 

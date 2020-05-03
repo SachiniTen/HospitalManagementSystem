@@ -6,6 +6,11 @@ $(document).ready(function() {
 	$("#alertError").hide();
 });
 
+
+
+
+
+
 // SAVE
 $(document).on("click", "#btnSave", function(event) {
 	// Clear alerts---------------------
@@ -24,12 +29,17 @@ $(document).on("click", "#btnSave", function(event) {
 	}
 
 	// if valid
-	var type = ($("hidItemIDSave").val() == "") ? "POST" : "PUT";
+	//var type = ($("hidItemIDSave").val().trim() == "") ? "POST" : "PUT";
+	
+	if($("#hidItemIDSave").val().trim() == "")
+		 type = "POST";
+	else
+		 type = "PUT";
 
 	$.ajax({
 
 		url : "PatientsAPI",
-		type : "PUT",
+		type : type,
 		data : $("#formItem").serialize(),
 		dataType : "text",
 		complete : function(response, status) {
@@ -68,7 +78,7 @@ function onItemSaveComplete(response, status) {
 
 //UPDATE==========================================
 $(document).on("click", ".btnUpdate", function(event) {    
-	$("#hidItemIDSave").val($(this).closest("tr").find('#hidItemIDUpdate').val());  
+	$("#hidItemIDSave").val($(this).data("pid"));  
 	$("#pFname").val($(this).closest("tr").find('td:eq(0)').text());    
 	$("#pLname").val($(this).closest("tr").find('td:eq(1)').text());  
 	$("#pAge").val($(this).closest("tr").find('td:eq(2)').text());

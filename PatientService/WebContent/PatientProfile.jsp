@@ -1,3 +1,7 @@
+<%@page import="com.Patient"%>
+<%@ page language="java" contentType="text/html; charset=ISO-8859-1"
+	pageEncoding="ISO-8859-1"%>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -13,8 +17,8 @@
 			<div class="col-6">
 			<link href="images/logo.png" rel="icon"/>
 				<h1>My Profile</h1>
-				<form id="formRegItem" name="formRegItem" method="POST"
-					action="RegisterPatient.jsp">
+				<form id="formItem" name="formItem" method="POST"
+					action="PatientProfile.jsp">
 					FirstName: 
 					<input id="pFname" name="pFname" type="text"
 						class="form-control form-control-sm"> <br>
@@ -43,7 +47,7 @@
 						class="form-control form-control-sm"> <br> Password:
 					<input id="pPassword" name="pPassword" type="password"
 						class="form-control form-control-sm"> <br>
-						 <input	id="btnReg" name="btnReg" type="button" value="Save" class="btn btn-primary">
+						 <input	id="btnSave" name="btnSave" type="button" value="Save" class="btn btn-primary">
 						 <input id="hidItemIDSave" name="hidItemIDSave" value="">
 						<input type="reset" id="configreset" value="Reset" class="btn btn-primary">
 				</form>
@@ -51,7 +55,12 @@
 				<div id="alertError" class="alert alert-danger"></div>
 				<br>
 				<div id="divItemsGrid">
-			
+				
+				<%
+						Patient patiObj = new Patient();
+					    out.print(patiObj.readPatients());
+					%>
+						
 					
 				</div>
 
