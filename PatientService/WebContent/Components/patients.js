@@ -1,4 +1,4 @@
-// The root URL for the RESTful services
+//The root URL for the RESTful services
 //var rootURL = "http://localhost:8080/PatService/PatientService/Patients";
 
 $(document).ready(function() {
@@ -6,12 +6,7 @@ $(document).ready(function() {
 	$("#alertError").hide();
 });
 
-
-
-
-
-
-// SAVE
+//SAVE
 $(document).on("click", "#btnSave", function(event) {
 	// Clear alerts---------------------
 
@@ -29,18 +24,18 @@ $(document).on("click", "#btnSave", function(event) {
 	}
 
 	// if valid
-	//var type = ($("hidItemIDSave").val().trim() == "") ? "POST" : "PUT";
-	
-	if($("#hidItemIDSave").val().trim() == "")
-		 type = "POST";
+	// var type = ($("hidItemIDSave").val().trim() == "") ? "POST" : "PUT";
+
+	if ($("#hidPatientIDSave").val().trim() == "")
+		type = "POST";
 	else
-		 type = "PUT";
+		type = "PUT";
 
 	$.ajax({
 
 		url : "PatientsAPI",
 		type : type,
-		data : $("#formItem").serialize(),
+		data : $("#formPatient").serialize(),
 		dataType : "text",
 		complete : function(response, status) {
 
@@ -71,16 +66,15 @@ function onItemSaveComplete(response, status) {
 		$("#alertError").show();
 	}
 
-	$("#hidItemIDSave").val("");
-	$("#formItem")[0].reset();
+	$("#hidPatientIDSave").val("");
+	$("#formPatient")[0].reset();
 }
 
-
 //UPDATE==========================================
-$(document).on("click", ".btnUpdate", function(event) {    
-	$("#hidItemIDSave").val($(this).data("pid"));  
-	$("#pFname").val($(this).closest("tr").find('td:eq(0)').text());    
-	$("#pLname").val($(this).closest("tr").find('td:eq(1)').text());  
+$(document).on("click", ".btnUpdate", function(event) {
+	$("#hidPatientIDSave").val($(this).data("pid"));
+	$("#pFname").val($(this).closest("tr").find('td:eq(0)').text());
+	$("#pLname").val($(this).closest("tr").find('td:eq(1)').text());
 	$("#pAge").val($(this).closest("tr").find('td:eq(2)').text());
 	$("#pGender").val($(this).closest("tr").find('td:eq(3)').text());
 	$("#pAddress").val($(this).closest("tr").find('td:eq(4)').text());
@@ -89,20 +83,17 @@ $(document).on("click", ".btnUpdate", function(event) {
 	$("#pEmail").val($(this).closest("tr").find('td:eq(7)').text());
 	$("#pUsername").val($(this).closest("tr").find('td:eq(8)').text());
 	$("#pPassword").val($(this).closest("tr").find('td:eq(9)').text());
-	}); 
+});
 
-
-
-
-// DELETE
+//DELETE
 $(document).on("click", ".btnRemove", function(event) {
 	$.ajax({
-		// url : rootURL + '/delete',
+		//rest url : rootURL + '/delete',
 		// url : rootURL + '/' + $('#pID').val(),
+		
 		url : "PatientsAPI",
 		type : "DELETE",
 		data : "pID=" + $(this).data("pid"),
-
 		dataType : "text",
 		complete : function(response, status) {
 
@@ -135,26 +126,39 @@ function onItemDeleteComplete(response, status) {
 	}
 }
 
-// CLIENTMODEL=========================================================================
-function validateItemForm() { // FNAME
-	if ($("#pFname").val().trim() == "") {
+//VALIDATION
+//CLIENTMODEL=========================================================================
+function validateItemForm() { 
+	
+	/*------FNAME------*/
+	if ($("#pFname").val().trim() == "")
+	{
 		return "Insert First Name.";
 	}
 
-	// LNAME
-	if ($("#pLname").val().trim() == "") {
+	/*------LNAME------*/
+	if ($("#pLname").val().trim() == "")
+	{
 		return "Insert Last Name.";
 	}
 
-	// AGE-------------------------------
-	if ($("#pAge").val().trim() == "") {
+	/*------AGE------*/
+	var tmpAge = $("#pAge").val().trim();
+	//IF NULL
+	if (tmpAge == "") 
+	{
 		return "Insert Age.";
 	}
-
-	// is numerical value
-	var tmpAge = $("#pAge").val().trim();
-	if (!$.isNumeric(tmpAge)) {
+	
+	//IF NOT NUMERIC
+	if (!$.isNumeric(tmpAge))
+	{
 		return "Insert a numerical value for Age";
+	}
+	//IF INVALID
+	if (tmpAge <= 0) 
+	{
+		return "Invalid Age";
 	}
 
 	// is numerical value
@@ -166,20 +170,29 @@ function validateItemForm() { // FNAME
 	// convert to decimal price
 	// $("#itemPrice").val(parseFloat(tmpPrice).toFixed(2));
 
-	// GENDER------------------------
-	if ($("#pGender").val().trim() == "") {
+	/*------GENDER------*/
+	if ($("#pGender").val().trim() == "") 
+	{
 		return "Insert Gender.";
 	}
 
-	// ADDRESS
-	if ($("#pAddress").val().trim() == "") {
+	/*------ADDRESS------*/
+	if ($("#pAddress").val().trim() == "") 
+	{
 		return "Insert Address.";
 	}
 
-	// CONTACTNO
-	if ($("#pContactNo").val().trim() == "") {
+	/*------CONTACTNO------*/
+	var tmpPhone =  $("#pContactNo").val().trim();
+	if (tmpPhone == "") 
+	{
 		return "Insert Contact No.";
 	}
+	if(!IsPhone(tmpPhone))
+	{
+		return "Invalid ContactNo";
+	}
+	
 
 	// is numerical value
 	// var tmp = $("#pContactNo").val().trim();
@@ -187,29 +200,93 @@ function validateItemForm() { // FNAME
 	// Contact No:";
 	// }
 
-	// NIC
-	if ($("#pNIC").val().trim() == "") {
+	/*------NIC------*/
+	var tmpNIC = $("#pNIC").val().trim();
+	if (tmpNIC == "") 
+	{
 		return "Insert NIC";
 	}
-
-	// EMAIL
-	if ($("#pEmail").val().trim() == "") {
-		return "Insert Email";
+	if(!IsNIC(tmpNIC))
+	{
+		return "Invalid NIC"; 
 	}
 
-	// USERNAME
-	if ($("#pUsername").val().trim() == "") {
+	
+	/*------EMAIL------*/
+	var tmpEmail = $("#pEmail").val().trim();
+	//IF NULL
+	if (tmpEmail == "")
+	{
+		return "Insert Email";
+	}
+	//IF INVALID
+	if(!IsEmail(tmpEmail))
+	{
+		return "Invalid Email";
+	}	
+
+	
+	/*------USERNAME------*/
+	if ($("#pUsername").val().trim() == "") 
+	{
 		return "Insert Username";
 	}
 
-	// PASSWORD
-	if ($("#pPassword").val().trim() == "") {
+	/*------PASSWORD------*/
+	var tmpPass = $("#pPassword").val().trim();
+	//IF NULL
+	if ($("#pPassword").val().trim() == "")
+	{
 		return "Insert Password.";
 	}
-	var tmpPass = $("#pPassword").val().trim();
+	//IF INVALID LENGTH
 	if (tmpPass.length < 8) {
 		return "Password should be at least 8 characters long";
 	}
 
+	
 	return true;
 }
+
+//FUNCTION TO CHECK VALIDITY OF EMAIL
+function IsEmail(email)
+{
+	  var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	  if(!regex.test(email))
+	  {
+	    return false;
+	  }
+	  else
+	  {
+	    return true;
+	  }
+}
+
+//FUNCTION TO CHECK VALIDITY OF CONTACTNO
+function IsPhone(phone)
+{
+	  var regex =/^(?:0|94|\+94)?(?:(11|21|23|24|25|26|27|31|32|33|34|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81|912)(0|2|3|4|5|7|9)|7(0|1|2|5|6|7|8)\d)\d{6}$/;;
+	  if(!regex.test(phone))
+	  {
+	    return false;
+	  }
+	  else
+	  {
+	    return true;
+	  }
+}
+
+//FUNCTION TO CHECK VALIDITY OF NIC
+function IsNIC(nic)
+{
+	  var regex = /^[0-9]{9}[vVxX]$/;
+	  if(!regex.test(nic))
+	  {
+	    return false;
+	  }
+	  else
+	  {
+	    return true;
+	  }
+}
+

@@ -52,8 +52,7 @@ public class PatientsAPI extends HttpServlet {
 				   request.getParameter("pEmail"),  
 				   request.getParameter("pUsername"),
 				   request.getParameter("pPassword")
-				 
-				   ); 
+				 ); 
 		
 		response.getWriter().write(output);
 
@@ -68,7 +67,7 @@ public class PatientsAPI extends HttpServlet {
 		
 				Map paras = getParasMap(request); 
 				 
-				 String output = patiObj.updatePatient(paras.get("hidItemIDSave").toString(),    
+				 String output = patiObj.updatePatient(paras.get("hidPatientIDSave").toString(),    
 						 							paras.get("pFname").toString(), 
 						 							paras.get("pLname").toString(),   
 						 							paras.get("pAge").toString(),    
@@ -118,7 +117,6 @@ public class PatientsAPI extends HttpServlet {
 				}
 			catch (Exception e)
 			{
-				
 			}  
 				return map;
 	} 

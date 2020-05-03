@@ -8,10 +8,13 @@ public class Patient {
 	// connection object
 	dbconnect obj = new dbconnect();
 
+	/*----------view patient list----------*/
 	public String readPatients() {
 		String output = "";
+
 		try {
 			Connection con = obj.connect();
+
 			if (con == null) {
 				return "Error while connecting to the database for reading.";
 			}
@@ -41,7 +44,7 @@ public class Patient {
 				// Add into the html table
 				// output += "<tr><td>" + pFname + "</td>";
 				// Add into the html table
-				output += "<tr><td><input id='hidItemIDUpdate name='hidItemIDUpdate'" + "type='hidden' value='" + pID
+				output += "<tr><td><input id='hidPatientIDUpdate name='hidPatientIDUpdate'" + "type='hidden' value='" + pID
 						+ "'>" + pFname + "</td>";
 				output += "<td>" + pLname + "</td>";
 				output += "<td>" + pAge + "</td>";
@@ -55,7 +58,7 @@ public class Patient {
 
 				// buttons
 				output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'"
-						+"data-pid='" + pID + "'>" + "</td>"
+						+ "data-pid='" + pID + "'>" + "</td>"
 						+ "<td><input name='btnRemove' type='button' value='Remove' class='btnRemove btn btn-danger'"
 						+ "data-pid='" + pID + "'>" + "</td></tr>";
 			}
@@ -69,15 +72,17 @@ public class Patient {
 		return output;
 	}
 
-//INSERT
+	/*----------insert new patient----------*/
 	public String insertPatient(String pFname, String pLname, String pAge, String pGender, String pAddress,
 			String pContactNo, String pNIC, String pEmail, String pUsername, String pPassword) {
 		String output = "";
+
 		try {
 			Connection con = obj.connect();
 			if (con == null) {
 				return "Error while connecting to the database for inserting.";
 			}
+
 			// create a prepared statement
 			String query = " insert into patient"
 					+ " (`pID`,`pFname`,`pLname`,`pAge`,`pGender`,`pAddress`,`pContactNo`,`pNIC`,`pEmail`,`pUsername`,`pPassword`)"
@@ -110,18 +115,21 @@ public class Patient {
 		return output;
 	}
 
-	// UPDATE
+	/*----------update patient details----------*/
 	public String updatePatient(String pID, String pFname, String pLname, String pAge, String pGender, String pAddress,
 			String pContactNo, String pNIC, String pEmail, String pUsername, String pPassword) {
 		String output = "";
+
 		try {
 			Connection con = obj.connect();
 			if (con == null) {
 				return "Error while connecting to the database for updating.";
 			}
+
 			// create a prepared statement
 			String query = "UPDATE patient SET pFname=?,pLname=?,pAge=?,pGender=?,pAddress=?,pContactNo=?,pNIC=?,pEmail=?,pUsername=?,pPassword=? WHERE pID=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
+
 			// binding values
 			preparedStmt.setString(1, pFname);
 			preparedStmt.setString(2, pLname);
@@ -135,8 +143,6 @@ public class Patient {
 			preparedStmt.setString(10, pPassword);
 			preparedStmt.setInt(11, Integer.parseInt(pID));
 
-			
-
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
@@ -149,10 +155,11 @@ public class Patient {
 		return output;
 	}
 
-	
-	//DELETE
+	/*----------delete patient----------*/
 	public String deletePatient(String pID) {
+
 		String output = "";
+
 		try {
 			Connection con = obj.connect();
 			if (con == null) {
@@ -162,11 +169,14 @@ public class Patient {
 			// create a prepared statement
 			String query = "delete from patient where pID=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
+
 			// binding values
 			preparedStmt.setInt(1, Integer.parseInt(pID));
+
 			// execute the statement
 			preparedStmt.execute();
 			con.close();
+
 			String newItems = readPatients();
 			output = "{\"status\":\"success\", \"data\": \"" + newItems + "\"}";
 		} catch (Exception e) {
