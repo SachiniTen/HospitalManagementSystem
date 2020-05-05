@@ -1,14 +1,23 @@
 package com;
 
 import java.sql.*;
+
+import org.apache.commons.codec.digest.DigestUtils;
+
 import database.*;
 
+/**Patient class.
+ * @author Sachini
+ *
+ */
 public class Patient {
 
 	// connection object
-	dbconnect obj = new dbconnect();
+	DBConnect obj = new DBConnect();
 
-	/*----------view patient list----------*/
+
+	
+	/*-------------------view patient list-------------------*/
 	public String readPatients() {
 		String output = "";
 
@@ -19,9 +28,9 @@ public class Patient {
 				return "Error while connecting to the database for reading.";
 			}
 			// Prepare the html table to be displayed
-			output = "<table border='1'><tr><th>fname</th>" + "<th>lname</th>" + "<th>Age</th>"
+			output = "<table class='table table-bordered table-hover'><tr class='active'><th>FirstName</th>" + "<th>LastName</th>" + "<th>Age</th>"
 					+ "<th>Gender</th><th>Address</th>" + "<th>ContactNo</th>" + "<th>NIC</th><th>Email</th>"
-					+ "<th>Username</th>" + "<th>Password</th>" + "<th>Update</th><th>Remove</th></tr>";
+					+ "<th>Username</th>"+ "<th>Update</th><th>Remove</th></tr>";
 
 			String query = "select * from patient";
 			Statement stmt = con.createStatement();
@@ -42,9 +51,7 @@ public class Patient {
 				String pPassword = rs.getString("pPassword");
 
 				// Add into the html table
-				// output += "<tr><td>" + pFname + "</td>";
-				// Add into the html table
-				output += "<tr><td><input id='hidPatientIDUpdate name='hidPatientIDUpdate'" + "type='hidden' value='" + pID
+				output += "<tr><td><input id='hidPatientIDUpdate name='hidPatientIDUpdate' type='hidden' value='" + pID
 						+ "'>" + pFname + "</td>";
 				output += "<td>" + pLname + "</td>";
 				output += "<td>" + pAge + "</td>";
@@ -54,7 +61,8 @@ public class Patient {
 				output += "<td>" + pNIC + "</td>";
 				output += "<td>" + pEmail + "</td>";
 				output += "<td>" + pUsername + "</td>";
-				output += "<td>" + pPassword + "</td>";
+				output += "<td style='display:none;'>" + pPassword + "</td>";
+
 
 				// buttons
 				output += "<td><input name='btnUpdate' type='button' value='Update' class='btnUpdate btn btn-secondary'"
@@ -72,7 +80,9 @@ public class Patient {
 		return output;
 	}
 
-	/*----------insert new patient----------*/
+
+	
+	/*-------------------insert new patient-------------------*/
 	public String insertPatient(String pFname, String pLname, String pAge, String pGender, String pAddress,
 			String pContactNo, String pNIC, String pEmail, String pUsername, String pPassword) {
 		String output = "";
@@ -82,6 +92,9 @@ public class Patient {
 			if (con == null) {
 				return "Error while connecting to the database for inserting.";
 			}
+
+			//encrypt password
+			String encryptPass = DigestUtils.shaHex(pPassword);
 
 			// create a prepared statement
 			String query = " insert into patient"
@@ -101,7 +114,7 @@ public class Patient {
 			preparedStmt.setString(8, pNIC);
 			preparedStmt.setString(9, pEmail);
 			preparedStmt.setString(10, pUsername);
-			preparedStmt.setString(11, pPassword);
+			preparedStmt.setString(11, encryptPass);
 
 			// execute the statement
 			preparedStmt.execute();
@@ -115,7 +128,9 @@ public class Patient {
 		return output;
 	}
 
-	/*----------update patient details----------*/
+
+	
+	/*-------------------update patient details-------------------*/
 	public String updatePatient(String pID, String pFname, String pLname, String pAge, String pGender, String pAddress,
 			String pContactNo, String pNIC, String pEmail, String pUsername, String pPassword) {
 		String output = "";
@@ -130,6 +145,9 @@ public class Patient {
 			String query = "UPDATE patient SET pFname=?,pLname=?,pAge=?,pGender=?,pAddress=?,pContactNo=?,pNIC=?,pEmail=?,pUsername=?,pPassword=? WHERE pID=?";
 			PreparedStatement preparedStmt = con.prepareStatement(query);
 
+			//encrypt password
+			String encryptPass = DigestUtils.shaHex(pPassword);
+
 			// binding values
 			preparedStmt.setString(1, pFname);
 			preparedStmt.setString(2, pLname);
@@ -140,7 +158,7 @@ public class Patient {
 			preparedStmt.setString(7, pNIC);
 			preparedStmt.setString(8, pEmail);
 			preparedStmt.setString(9, pUsername);
-			preparedStmt.setString(10, pPassword);
+			preparedStmt.setString(10, encryptPass);
 			preparedStmt.setInt(11, Integer.parseInt(pID));
 
 			// execute the statement
@@ -155,7 +173,9 @@ public class Patient {
 		return output;
 	}
 
-	/*----------delete patient----------*/
+
+	
+	/*-------------------delete patient-------------------*/
 	public String deletePatient(String pID) {
 
 		String output = "";

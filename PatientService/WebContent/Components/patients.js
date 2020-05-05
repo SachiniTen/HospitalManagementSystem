@@ -70,6 +70,7 @@ function onItemSaveComplete(response, status) {
 	$("#formPatient")[0].reset();
 }
 
+
 //UPDATE==========================================
 $(document).on("click", ".btnUpdate", function(event) {
 	$("#hidPatientIDSave").val($(this).data("pid"));
@@ -85,12 +86,13 @@ $(document).on("click", ".btnUpdate", function(event) {
 	$("#pPassword").val($(this).closest("tr").find('td:eq(9)').text());
 });
 
+
 //DELETE
 $(document).on("click", ".btnRemove", function(event) {
 	$.ajax({
 		//rest url : rootURL + '/delete',
 		// url : rootURL + '/' + $('#pID').val(),
-		
+
 		url : "PatientsAPI",
 		type : "DELETE",
 		data : "pID=" + $(this).data("pid"),
@@ -129,7 +131,7 @@ function onItemDeleteComplete(response, status) {
 //VALIDATION
 //CLIENTMODEL=========================================================================
 function validateItemForm() { 
-	
+
 	/*------FNAME------*/
 	if ($("#pFname").val().trim() == "")
 	{
@@ -149,7 +151,7 @@ function validateItemForm() {
 	{
 		return "Insert Age.";
 	}
-	
+
 	//IF NOT NUMERIC
 	if (!$.isNumeric(tmpAge))
 	{
@@ -160,15 +162,6 @@ function validateItemForm() {
 	{
 		return "Invalid Age";
 	}
-
-	// is numerical value
-	// var tmpPrice = $("#itemPrice").val().trim();
-	// if(!$.isNumeric(tmpPrice)) { return "Insert a numerical value for Item
-	// Price.";
-	// }
-
-	// convert to decimal price
-	// $("#itemPrice").val(parseFloat(tmpPrice).toFixed(2));
 
 	/*------GENDER------*/
 	if ($("#pGender").val().trim() == "") 
@@ -192,13 +185,7 @@ function validateItemForm() {
 	{
 		return "Invalid ContactNo";
 	}
-	
 
-	// is numerical value
-	// var tmp = $("#pContactNo").val().trim();
-	// if(!$.isNumeric(tmpAge) && (tmpAge.length) > 8) { return "Insert a valid
-	// Contact No:";
-	// }
 
 	/*------NIC------*/
 	var tmpNIC = $("#pNIC").val().trim();
@@ -211,7 +198,7 @@ function validateItemForm() {
 		return "Invalid NIC"; 
 	}
 
-	
+
 	/*------EMAIL------*/
 	var tmpEmail = $("#pEmail").val().trim();
 	//IF NULL
@@ -225,7 +212,7 @@ function validateItemForm() {
 		return "Invalid Email";
 	}	
 
-	
+
 	/*------USERNAME------*/
 	if ($("#pUsername").val().trim() == "") 
 	{
@@ -244,49 +231,49 @@ function validateItemForm() {
 		return "Password should be at least 8 characters long";
 	}
 
-	
+
 	return true;
 }
 
 //FUNCTION TO CHECK VALIDITY OF EMAIL
 function IsEmail(email)
 {
-	  var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
-	  if(!regex.test(email))
-	  {
-	    return false;
-	  }
-	  else
-	  {
-	    return true;
-	  }
+	var regex = /^([a-zA-Z0-9_\.\-\+])+\@(([a-zA-Z0-9\-])+\.)+([a-zA-Z0-9]{2,4})+$/;
+	if(!regex.test(email))
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 //FUNCTION TO CHECK VALIDITY OF CONTACTNO
 function IsPhone(phone)
 {
-	  var regex =/^(?:0|94|\+94)?(?:(11|21|23|24|25|26|27|31|32|33|34|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81|912)(0|2|3|4|5|7|9)|7(0|1|2|5|6|7|8)\d)\d{6}$/;;
-	  if(!regex.test(phone))
-	  {
-	    return false;
-	  }
-	  else
-	  {
-	    return true;
-	  }
+	var regex =/^(?:0|94|\+94)?(?:(11|21|23|24|25|26|27|31|32|33|34|35|36|37|38|41|45|47|51|52|54|55|57|63|65|66|67|81|912)(0|2|3|4|5|7|9)|7(0|1|2|5|6|7|8)\d)\d{6}$/;;
+	if(!regex.test(phone))
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
 //FUNCTION TO CHECK VALIDITY OF NIC
 function IsNIC(nic)
 {
-	  var regex = /^[0-9]{9}[vVxX]$/;
-	  if(!regex.test(nic))
-	  {
-	    return false;
-	  }
-	  else
-	  {
-	    return true;
-	  }
+	var regex = /^[0-9]{9}[vVxX]$/;
+	if(!regex.test(nic))
+	{
+		return false;
+	}
+	else
+	{
+		return true;
+	}
 }
 
